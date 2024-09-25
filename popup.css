@@ -1,0 +1,40 @@
+/* popup.css */
+body {
+    font-family: Arial, sans-serif;
+    width: 300px;
+    padding: 10px;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.text-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    min-height: 50px;
+    text-align: center;
+    overflow-wrap: break-word;
+}
