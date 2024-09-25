@@ -11,5 +11,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ text: selectedText });
     }
 
-    return true; // Required for asynchronous response
+    return true;  
 });

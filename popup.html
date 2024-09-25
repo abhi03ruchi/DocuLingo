@@ -5,21 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="popup.css" />
-    <title>Text Translator</title>
+    <title>DocuLingo - Text Translator</title>
 </head>
 <body>
     <div class="container">
-        <h1>Translate</h1>
-        <div class="box">
-            <h2>Selected Text:</h2>
+        <h1 class="title">DocuLingo</h1>
+
+        <!-- Toggle switch for translating the whole page -->
+        <div class="toggle-container">
+            <span class="toggle-label">Translate whole page?</span>
+            <label class="switch">
+                <input type="checkbox" id="translatePageToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Container to display selected text -->
+        <div id="selectedTextContainer" class="box selected-text-box">
+            <h2 class="section-title">Selected Text:</h2>
             <div id="output" class="text-box">No text selected.</div>
         </div>
-        <button id="translateButton">🔄 Translate</button>
-        <div class="box">
-            <h2>Translated Text:</h2>
+
+        <!-- Input bar to enter target language -->
+        <div class="input-container">
+            <label for="languageInput" class="label">Enter Target Language:</label>
+            <input type="text" id="languageInput" class="input-bar" placeholder="e.g., French, Spanish" />
+            <div id="errorMessage" class="error-message"></div> <!-- Error message will appear here -->
+        </div>
+
+        <button id="translateButton" class="translate-btn">🔄 Translate</button>
+
+        <!-- Container to display the translated text -->
+        <div class="box translated-text-box">
+            <h2 class="section-title">Translated Text:</h2>
             <div id="to" class="text-box">Translation will appear here.</div>
         </div>
     </div>
+
     <script src="popup.js"></script>
 </body>
 </html>

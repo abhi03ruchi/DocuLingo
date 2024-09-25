@@ -1,40 +1,141 @@
-/* popup.css */
 body {
-    font-family: Arial, sans-serif;
-    width: 300px;
-    padding: 10px;
+    background-color: #1a1a1a; /* Dark background */
+    color: #ffffff; /* White text */
+    font-family: 'Arial', sans-serif; /* Clean font */
     margin: 0;
-    background-color: #f4f4f4;
-}
-
-h1 {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 18px;
-    margin-bottom: 5px;
+    padding: 0;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 10px;
+    width: 250px; /* Adjusted width to make it wider */
+    height: auto; /* Auto height to prevent stretching */
+    margin: 0 auto;
+    background-color: #2b2b2b;
+    border-radius: 10px;
 }
 
-.box {
-    width: 100%;
-    margin-bottom: 20px;
+.title {
+    text-align: center;
+    color: #ffa500; /* Orange header */
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Keep items aligned on opposite sides */
+    margin: 10px 0;
+}
+
+.toggle-label {
+    color: #ffffff;
+    font-size: 13px;
+    margin-right: 10px; 
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; 
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #555;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #ffa500;
+}
+
+input:checked + .slider:before {
+    transform: translateX(18px); 
+}
+
+.selected-text-box, .translated-text-box {
+    background-color: #333333;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
 }
 
 .text-box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 4px;
-    min-height: 50px;
-    text-align: center;
-    overflow-wrap: break-word;
+    font-size: 13px;
+    color: #ffffff;
 }
+
+.dropdown-container {
+    margin-bottom: 12px;
+}
+
+.dropdown {
+    width: 100%;
+    padding: 6px;
+    border-radius: 5px;
+    background-color: #444;
+    color: #fff;
+}
+
+.translate-btn {
+    width: 100%;
+    padding: 8px;
+    background-color: #ffa500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.translate-btn:hover {
+    background-color: #ff8c00;
+}
+
+.input-container {
+    margin-bottom: 12px;
+}
+
+.input-bar {
+    width: 100%;
+    padding: 6px;
+    border-radius: 5px;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #666;
+}
+
+.input-bar::placeholder {
+    color: #bbb;
+}
+
+.error-message {
+    font-size: 12px;
+    margin-top: 4px;
+    color: red;
+}
+
