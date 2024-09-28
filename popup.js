@@ -1,5 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // List of supported languages (language names and codes)
+document.addEventListener('DOMContentLoaded', () => {
+    // Notify background.js that the popup has been opened to clear any previous selected text
+    chrome.runtime.sendMessage({ type: 'popupOpened' });
+
     const supportedLanguages = {
         "afrikaans": "af",
         "albanian": "sq",
@@ -98,54 +100,80 @@ document.addEventListener('DOMContentLoaded', function () {
         "yiddish": "yi",
         "yoruba": "yo",
         "zulu": "zu",
-       
     };
-    
 
-    // Send a message to get the selected text
-    chrome.runtime.sendMessage({ type: 'getText' }, function (response) {
+    const outputElement = document.getElementById('output');
+    const selectedTextContainer = document.getElementById('selectedTextContainer');
+    const translatePageToggle = document.getElementById('translatePageToggle');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Function to handle translation based on user selection
+    const handleTranslation = (translateWholePage, selectedLanguageCode, selectedText) => {
+        if (translateWholePage) {
+            chrome.runtime.sendMessage({ action: "translateWholePage", language: selectedLanguageCode }, (response) => {
+                if (chrome.runtime.lastError) {
+                    document.getElementById('to').innerText = `Error: ${chrome.runtime.lastError.message}`;
+                    return;
+                }
+                document.getElementById('to').innerText = response && response.text ? 'Translation complete.' : 'Translation failed. Try again.';
+            });
+        } else {
+            fetch('http://localhost:8000/translate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    text: selectedText,
+                    target_language: selectedLanguageCode
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('to').innerText = data.translated_text || 'Translation failed. Try again.';
+            })
+            .catch(error => {
+                console.error('Error with translation request:', error);
+                document.getElementById('to').innerText = 'Error occurred. Try again.';
+            });
+        }
+    };
+
+    // Retrieve selected text and set it in the output
+    chrome.runtime.sendMessage({ type: 'getText' }, (response) => {
         if (chrome.runtime.lastError) {
             console.error("Error sending message:", chrome.runtime.lastError);
-            document.getElementById('output').innerText = 'No text selected.';
+            outputElement.innerText = 'No text selected.';
             return;
         }
 
-        const outputElement = document.getElementById('output');
-        const selectedTextContainer = document.getElementById('selectedTextContainer');
-        const translatePageToggle = document.getElementById('translatePageToggle');
-        const errorMessage = document.getElementById('errorMessage');
-
         outputElement.innerText = response.text;
 
+        // Toggle display for page translation
         translatePageToggle.addEventListener('change', function () {
+            selectedTextContainer.style.display = this.checked ? 'none' : 'block';
             if (this.checked) {
-                selectedTextContainer.style.display = 'none';
                 outputElement.innerText = '';
-            } else {
-                selectedTextContainer.style.display = 'block';
             }
         });
 
-        document.getElementById('translateButton').addEventListener('click', function () {
+        // Handle translate button click
+        document.getElementById('translateButton').addEventListener('click', () => {
             const languageInput = document.getElementById('languageInput').value.trim().toLowerCase();
             const translateWholePage = translatePageToggle.checked;
 
-            // Check if the entered language is valid
             if (supportedLanguages[languageInput]) {
                 const selectedLanguageCode = supportedLanguages[languageInput];
-                errorMessage.innerText = '';  // Clear error message
+                errorMessage.innerText = '';  // Clear any error messages
+                const selectedText = outputElement.innerText;
 
-                if (translateWholePage) {
-                    console.log('Translating whole page to:', selectedLanguageCode);
-                    // Add logic to translate the whole page here
+                if (translateWholePage || selectedText) {
+                    handleTranslation(translateWholePage, selectedLanguageCode, selectedText);
                 } else {
-                    console.log('Translating selected text to:', selectedLanguageCode);
-                    // Add logic to translate selected text here
+                    errorMessage.innerText = 'No text selected to translate.';
+                    errorMessage.style.color = 'red';
                 }
-
-                document.getElementById('to').innerText = 'Translation in progress...';
             } else {
-                // Display an error message if the language is invalid
                 errorMessage.innerText = 'Invalid language entered. Please try again.';
                 errorMessage.style.color = 'red';
             }
